@@ -25,7 +25,7 @@ type token struct {
 }
 
 var port = fmt.Sprintf(":%s", os.Getenv("PORT"))
-var callbackURI = fmt.Sprintf("http://localhost%s/callback", port)
+var callbackURI = fmt.Sprintf("http://localhost%s%s", port, os.Getenv("CALLBACK_URI"))
 var postURI = fmt.Sprintf("%s/oauth2/token", os.Getenv("BASE_URI"))
 
 func waitForEnter() {
@@ -88,6 +88,6 @@ func main() {
 	log.Printf("Now your browser should open with URI:\n==> %s\nif not please open it manually", openURI)
 	open.Run(openURI)
 
-	http.HandleFunc("/callback", handler)
+	http.HandleFunc(os.Getenv("CALLBACK_URI"), handler)
 	log.Fatal(http.ListenAndServe(port, nil))
 }
